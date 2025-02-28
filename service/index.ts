@@ -134,6 +134,6 @@ class HttpClient {
 //   },
 // });
 
-export const systemHttp = new HttpClient({
+export const demoHttp = new HttpClient({
   service: "demo",
 });

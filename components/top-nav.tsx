@@ -1,16 +1,22 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { demoHttp } from "@/service";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export function TopNav() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const navItems = [
     { href: "/", label: "数据总览" },
     { href: "/detection-history", label: "检测历史" },
     { href: "/sensitive-content-strategy", label: "敏感内容识别策略管理" },
-  ]
+  ];
+
+  useEffect(() => {
+    demoHttp.updateToken(""); // auth token, todo
+  });
 
   return (
     <nav className="bg-white shadow-md">
@@ -39,6 +45,5 @@ export function TopNav() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
-

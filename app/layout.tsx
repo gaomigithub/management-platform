@@ -1,8 +1,8 @@
-import type React from "react"
+import { TopNav } from "@/components/top-nav"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import type React from "react"
 import "./globals.css"
-import { TopNav } from "@/components/top-nav"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -17,6 +17,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+
+
   return (
     <html lang="zh">
       <body className={inter.className}>
@@ -28,7 +31,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'

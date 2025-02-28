@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock, Mail, Zap } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Clock, Mail, Zap } from "lucide-react";
 import {
   CartesianGrid,
   Cell,
@@ -14,7 +14,14 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts"
+} from "recharts";
+
+// 数据总览
+const overview = {
+  efficiency: 121,
+  total: 15687,
+  average: 2.5,
+};
 
 // 更新每日研判数据，包含多个类型的邮件数量
 const dailyData = [
@@ -23,16 +30,16 @@ const dailyData = [
     total: 320,
     phishing: 45,
     sensitive: 78,
-    crossBorder: 120
+    crossBorder: 120,
   },
   {
     date: "05-02",
     total: 350,
     phishing: 52,
     sensitive: 85,
-    crossBorder: 132
-  }
-]
+    crossBorder: 132,
+  },
+];
 
 // 标签分布数据
 const tagDistribution = [
@@ -40,20 +47,26 @@ const tagDistribution = [
   { name: "敏感内容", value: 300 },
   { name: "钓鱼邮件", value: 200 },
   { name: "正常", value: 500 },
-]
+];
 
 // 研判结果分布数据
 const judgmentDistribution = [
   { name: "研判正确", value: 850, color: "#10B981" }, // 绿色
   { name: "误判", value: 150, color: "#EF4444" }, // 红色
-]
+];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#22C55E"]
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#22C55E"];
 
 export function Dashboard() {
   // 计算研判准确率
-  const totalJudgments = judgmentDistribution.reduce((acc, curr) => acc + curr.value, 0)
-  const accuracyRate = ((judgmentDistribution[0].value / totalJudgments) * 100).toFixed(1)
+  const totalJudgments = judgmentDistribution.reduce(
+    (acc, curr) => acc + curr.value,
+    0
+  );
+  const accuracyRate = (
+    (judgmentDistribution[0].value / totalJudgments) *
+    100
+  ).toFixed(1);
 
   return (
     <div className="space-y-6">
@@ -68,7 +81,8 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold text-blue-700">
-              120 <span className="text-xl font-normal text-blue-600">封/分钟</span>
+              {overview.efficiency}{" "}
+              <span className="text-xl font-normal text-blue-600">封/分钟</span>
             </div>
           </CardContent>
         </Card>
@@ -82,7 +96,8 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold text-green-700">
-              15,687 <span className="text-xl font-normal text-green-600">封</span>
+              {overview.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+              <span className="text-xl font-normal text-green-600">封</span>
             </div>
           </CardContent>
         </Card>
@@ -96,7 +111,10 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold text-purple-700">
-              2.5 <span className="text-xl font-normal text-purple-600">分钟/封</span>
+              {overview.average}{" "}
+              <span className="text-xl font-normal text-purple-600">
+                分钟/封
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -120,8 +138,8 @@ export function Dashboard() {
                     phishing: "钓鱼邮件",
                     sensitive: "敏感内容",
                     crossBorder: "跨境邮件",
-                  }
-                  return [`${value} 封`, labels[name as keyof typeof labels]]
+                  };
+                  return [`${value} 封`, labels[name as keyof typeof labels]];
                 }}
               />
               <Legend
@@ -131,8 +149,8 @@ export function Dashboard() {
                     phishing: "钓鱼邮件总数",
                     sensitive: "敏感内容邮件总数",
                     crossBorder: "跨境邮件总数",
-                  }
-                  return labels[value as keyof typeof labels]
+                  };
+                  return labels[value as keyof typeof labels];
                 }}
               />
               <Line
@@ -190,10 +208,15 @@ export function Dashboard() {
                   fill="#8884d8"
                   paddingAngle={5}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
                 >
                   {tagDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -239,6 +262,5 @@ export function Dashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
-
