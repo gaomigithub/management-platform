@@ -1,11 +1,11 @@
-import { IDailyDataItem, IJudgmentDistributionItem, ITagDistributionItem } from "@/types/dashboard";
+import { IDailyDataItem, IJudgmentDistributionItem, IOverview, ITagDistributionItem } from "@/types/dashboard";
 import { demoHttp } from ".";
 
 /**
  * 数据总览
  */
 export function getOverview() {
-    return demoHttp.get<IDailyDataItem[]>(`/getDailyData`);
+    return demoHttp.get<IOverview>(`/getOverview`);
 }
 
 /** 

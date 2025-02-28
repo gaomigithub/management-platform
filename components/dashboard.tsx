@@ -1,7 +1,20 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  getDailyData,
+  getJudgmentDistribution,
+  getOverview,
+  getTagDistribution,
+} from "@/service/dashboard";
+import {
+  IDailyDataItem,
+  IJudgmentDistributionItem,
+  IOverview,
+  ITagDistributionItem,
+} from "@/types/dashboard";
 import { Clock, Mail, Zap } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CartesianGrid,
   Cell,
@@ -17,14 +30,14 @@ import {
 } from "recharts";
 
 // 数据总览
-const overview = {
+const mockOverview = {
   efficiency: 121,
   total: 15687,
   average: 2.5,
 };
 
 // 更新每日研判数据，包含多个类型的邮件数量
-const dailyData = [
+const mockDailyData = [
   {
     date: "05-01",
     total: 320,
@@ -42,7 +55,7 @@ const dailyData = [
 ];
 
 // 标签分布数据
-const tagDistribution = [
+const mockTagDistribution = [
   { name: "跨境邮件", value: 400 },
   { name: "敏感内容", value: 300 },
   { name: "钓鱼邮件", value: 200 },
@@ -50,7 +63,7 @@ const tagDistribution = [
 ];
 
 // 研判结果分布数据
-const judgmentDistribution = [
+const mockJudgmentDistribution = [
   { name: "研判正确", value: 850, color: "#10B981" }, // 绿色
   { name: "误判", value: 150, color: "#EF4444" }, // 红色
 ];
@@ -58,15 +71,68 @@ const judgmentDistribution = [
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#22C55E"];
 
 export function Dashboard() {
+  const [overview, setOverview] = useState<IOverview>(mockOverview);
+  const [dailyData, setDailyData] = useState<IDailyDataItem[]>(mockDailyData);
+  const [tagDistribution, setTagDistribution] =
+    useState<ITagDistributionItem[]>(mockTagDistribution);
+  const [judgmentDistribution, setJudgmentDistribution] = useState<
+    IJudgmentDistributionItem[]
+  >(mockJudgmentDistribution);
+
+  const fetchOverviewData = useCallback(async () => {
+    const currOverview = await getOverview();
+    setOverview(currOverview.result);
+  }, []);
+  const fetchDailyData = useCallback(async () => {
+    const currDailyData = await getDailyData();
+    setDailyData(currDailyData.result);
+  }, []);
+  const fetchTagDistribution = useCallback(async () => {
+    const currTagDistribution = await getTagDistribution();
+    setTagDistribution(currTagDistribution.result);
+  }, []);
+  const fetchJudgmentDistribution = useCallback(async () => {
+    const currJudgmentDistribution = await getJudgmentDistribution();
+    setJudgmentDistribution(currJudgmentDistribution.result);
+  }, []);
+
+  const fetchAllData = useCallback(async () => {
+    const promises = [
+      fetchOverviewData(),
+      fetchDailyData(),
+      fetchTagDistribution(),
+      fetchJudgmentDistribution(),
+    ];
+
+    const results = await Promise.allSettled(promises);
+
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled") {
+        console.log(`Promise ${index + 1} succeeded with value:`, result.value);
+      } else {
+        console.error(`Promise ${index + 1} failed with error:`, result.reason);
+      }
+    });
+  }, [
+    fetchOverviewData,
+    fetchDailyData,
+    fetchTagDistribution,
+    fetchJudgmentDistribution,
+  ]);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
   // 计算研判准确率
-  const totalJudgments = judgmentDistribution.reduce(
-    (acc, curr) => acc + curr.value,
-    0
+  const totalJudgments = useMemo(
+    () => judgmentDistribution.reduce((acc, curr) => acc + curr.value, 0),
+    [judgmentDistribution]
   );
-  const accuracyRate = (
-    (judgmentDistribution[0].value / totalJudgments) *
-    100
-  ).toFixed(1);
+  const accuracyRate = useMemo(
+    () => ((judgmentDistribution[0].value / totalJudgments) * 100).toFixed(1),
+    [judgmentDistribution, totalJudgments]
+  );
 
   return (
     <div className="space-y-6">
