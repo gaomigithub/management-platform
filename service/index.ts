@@ -4,7 +4,7 @@ import Qs from "qs";
 
 const API_SERVICES = {
   //   dolphin: '/jeecgdolphinapi',
-  demo: "/demo",
+  demo: "https://jzjv04.laf.run/",
 } as const;
 
 type ServiceType = keyof typeof API_SERVICES;

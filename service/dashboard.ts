@@ -12,19 +12,19 @@ export function getOverview() {
  * 每日邮件研判数据
  */
 export function getDailyData() {
-    return demoHttp.get<IDailyDataItem[]>(`/getDailyData`);
+    return demoHttp.get<IDailyDataItem[]>(`/phishing-api-daily-data`);
 }
 
 /** 
  * 标签分布
  */
 export function getTagDistribution() {
-    return demoHttp.get<ITagDistributionItem[]>(`/getTagDistribution`);
+    return demoHttp.get<ITagDistributionItem[]>(`/phishing-api-tag-distribution`);
 }
 
 /** 
- * 标签分布
+ * 研判结果分布
  */
 export function getJudgmentDistribution() {
-    return demoHttp.get<IJudgmentDistributionItem[]>(`/getJudgmentDistribution`);
+    return demoHttp.get<IJudgmentDistributionItem[]>(`/phishing-api-judgment-distribution`);
 }

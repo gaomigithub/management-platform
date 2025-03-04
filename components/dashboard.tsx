@@ -81,19 +81,20 @@ export function Dashboard() {
 
   const fetchOverviewData = useCallback(async () => {
     const currOverview = await getOverview();
-    setOverview(currOverview.result);
+    setOverview(currOverview.data);
   }, []);
   const fetchDailyData = useCallback(async () => {
     const currDailyData = await getDailyData();
-    setDailyData(currDailyData.result);
+    setDailyData(currDailyData.data);
   }, []);
   const fetchTagDistribution = useCallback(async () => {
     const currTagDistribution = await getTagDistribution();
-    setTagDistribution(currTagDistribution.result);
+    setTagDistribution(currTagDistribution.data);
   }, []);
   const fetchJudgmentDistribution = useCallback(async () => {
     const currJudgmentDistribution = await getJudgmentDistribution();
-    setJudgmentDistribution(currJudgmentDistribution.result);
+
+    setJudgmentDistribution(currJudgmentDistribution.data);
   }, []);
 
   const fetchAllData = useCallback(async () => {

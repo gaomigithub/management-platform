@@ -21,6 +21,14 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/jeecgfeature/:path*", // 匹配 /jeecgfeature 下的所有路径
+  //       destination: "https://test.9yundata.com/:path*", // 将请求转发到目标地址
+  //     },
+  //   ];
+  // },
 }
 
 mergeConfig(nextConfig, userConfig)

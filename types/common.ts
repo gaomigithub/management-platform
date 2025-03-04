@@ -1,9 +1,10 @@
 export interface ICommonResponse<T> {
-    code: number
-    message: string
-    result: T
-    success: boolean
-    timestamp: number
+    // code: number
+    // message: string
+    // result: T
+    // success: boolean
+    // timestamp: number
+    data:T
   }
   
   export interface ICommonQueryPageListRes<T> {
