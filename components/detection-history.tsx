@@ -1,27 +1,16 @@
 "use client"
 
-import { useState } from "react"
-import { useForm, Controller } from "react-hook-form"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { EmailModal } from "@/components/email-modal"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
-import { EmailModal } from "@/components/email-modal"
-import { ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, HelpCircle } from "lucide-react"
-
-type Email = {
-  id: string
-  sender: string
-  recipient: string
-  subject: string
-  tags: string[]
-  date: string
-  status: "未研判" | "研判中" | "研判完成"
-  humanLabel: "未确认" | "已确认" | "误判"
-  humanLabelReason?: string
-}
+import { Email } from "@/types/detection-history"
+import { AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, HelpCircle } from "lucide-react"
+import { useState } from "react"
+import { Controller, useForm } from "react-hook-form"
 
 const mockEmails: Email[] = [
   {
@@ -127,16 +116,17 @@ export function DetectionHistory() {
   })
 
   const onSubmit = (data: FilterForm) => {
+
     const filtered = mockEmails.filter((email) => {
       return (
         (!data.sender || email.sender.includes(data.sender)) &&
         (!data.recipient || email.recipient.includes(data.recipient)) &&
         (!data.subject || email.subject.includes(data.subject)) &&
-        (!data.tag || email.tags.includes(data.tag)) &&
+        (!data.tag || data.tag === 'all' || email.tags.includes(data.tag)) &&
         (!data.startDate || new Date(email.date) >= new Date(data.startDate)) &&
         (!data.endDate || new Date(email.date) <= new Date(data.endDate)) &&
-        (!data.status || email.status === data.status) &&
-        (!data.humanLabel || email.humanLabel === data.humanLabel)
+        (!data.status || data.status === 'all' || email.status === data.status) &&
+        (!data.humanLabel || data.humanLabel === 'all' || email.humanLabel === data.humanLabel)
       )
     })
     setFilteredEmails(filtered)
